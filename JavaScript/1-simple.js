@@ -11,7 +11,5 @@ EventEmitter.prototype.on = function(name, callback) {
 
 EventEmitter.prototype.emit = function(name, data) {
   const event = this.events[name];
-  if (event) event.forEach((callback) => {
-    callback(data);
-  });
+  if (event) event.forEach(callback => callback(data));
 };
