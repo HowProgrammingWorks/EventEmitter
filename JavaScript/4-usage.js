@@ -15,4 +15,4 @@ application.on('*', (name, data) => {
 
 application.emit('smth', { a: 5 });
 application.emit('smth2', { a: 500 });
-application.emit('*', { a: 500 });
+application.emit('*', { a: 700 });

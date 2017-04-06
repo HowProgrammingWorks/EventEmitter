@@ -1,6 +1,10 @@
 env:
   es6: true
   node: true
+globals:
+  api: false
+  application: false
+  EventEmitter: false
 extends: 'eslint:recommended'
 rules:
   indent:
