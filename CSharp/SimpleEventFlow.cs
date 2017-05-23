@@ -22,6 +22,7 @@ namespace HowProgrammingWorks.CSharpEvents
 
         public void Invoke()
         {
+            //I don't use null-conditional Operator ('?') to show events behaviour 
             SimpleEvent.Invoke(this,new EventArgs());
         }
 
