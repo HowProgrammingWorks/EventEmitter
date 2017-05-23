@@ -1,7 +1,8 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -11,35 +12,27 @@ import java.util.function.Consumer;
  *
  * @param <T> type of the listener's parameter
  */
-public class SimpleEventEmitter<T> {
+class SimpleEventEmitter<T> {
     /**
      * Map with all registered events and corresponding listeners.
      */
     private final Map<String, List<Consumer<T>>> events;
 
-    /**
-     * Constructs new SimpleEventEmitter.
-     */
-    public SimpleEventEmitter() {
+    protected SimpleEventEmitter() {
         this.events = new HashMap<>();
     }
 
     /**
      * Adds new listener to the given event.
      *
-     * @param name event's name
+     * @param name     event's name
      * @param listener action listener
      */
     public void on(final String name, final Consumer<T> listener) {
-        List<Consumer<T>> listeners = events.get(name);
-
-        if (listeners != null) {
-            listeners.add(listener);
-        } else {
-            listeners = new ArrayList<>();
-            listeners.add(listener);
-            events.put(name, listeners);
-        }
+        List<Consumer<T>> listeners = Optional.ofNullable(events.get(name))
+                .orElseGet(ArrayList::new);
+        listeners.add(listener);
+        events.put(name, listeners);
     }
 
     /**
@@ -49,29 +42,23 @@ public class SimpleEventEmitter<T> {
      * @param data event's data
      */
     public void emit(final String name, final T data) {
-        List<Consumer<T>> listeners = events.get(name);
-        if (listeners != null) {
-            for (Consumer<T> listener : listeners) {
-                listener.accept(data);
-            }
-        }
+        Optional.ofNullable(events.get(name))
+                .ifPresent((listeners) -> listeners
+                        .forEach((listener) -> listener.accept(data)));
     }
 
     /**
      * Removes event listener from specified event.
      *
-     * @param name event's name
+     * @param name     event's name
      * @param listener event listener
      * @return {@code true} if the event existed and the listener
      * was registered to that event, {@code false} otherwise
      */
     public boolean remove(final String name, final Consumer<T> listener) {
-        List<Consumer<T>> listeners = events.get(name);
-        if (listeners != null) {
-            return listeners.remove(listener);
-        }
-
-        return false;
+        return Optional.ofNullable(events.get(name))
+                .map((listeners) -> listeners.remove(listener))
+                .orElse(false);
     }
 
     /**
@@ -81,19 +68,6 @@ public class SimpleEventEmitter<T> {
      * @return {@code true} if the event existed, {@code false} otherwise
      */
     public boolean removeAll(final String name) {
-        List<Consumer<T>> actions = events.remove(name);
-        return actions != null;
-    }
-
-
-    /**
-     * Entry point of the program, used for testing.
-     *
-     * @param args command-line arguments, not used
-     */
-    public static void main(final String[] args) {
-        SimpleEventEmitter<String> eventEmitter = new SimpleEventEmitter<>();
-        eventEmitter.on("something", System.out::println);
-        eventEmitter.emit("something", "5");
+        return events.remove(name) != null;
     }
 }
