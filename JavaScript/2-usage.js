@@ -1,9 +1,8 @@
 'use strict';
 
-global.api = {};
-require('./1-simple.js');
+const EventEmitter = require('./1-simple.js');
 
-global.application = new EventEmitter();
+const application = new EventEmitter();
 
 application.on('smth', (data) => {
   console.dir(data);

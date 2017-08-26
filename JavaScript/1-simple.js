@@ -1,6 +1,6 @@
 'use strict';
 
-global.EventEmitter = function() {
+const EventEmitter = function() {
   this.events = {/* hash of array of function */};
 };
 
@@ -14,3 +14,5 @@ EventEmitter.prototype.emit = function(name, data) {
   const event = this.events[name];
   if (event) event.forEach(fn => fn(data));
 };
+
+module.exports = EventEmitter;

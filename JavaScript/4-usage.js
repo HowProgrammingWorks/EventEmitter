@@ -1,9 +1,8 @@
 'use strict';
 
-global.api = {};
-require('./3-enhanced.js');
+const emitter = require('./3-enhanced.js');
 
-global.application = api.events.enhancedEventEmitter();
+const application = emitter();
 
 application.on('smth', (data) => {
   console.dir(data);
