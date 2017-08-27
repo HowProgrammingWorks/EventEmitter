@@ -9,7 +9,9 @@ application.on('smth', (data) => {
 });
 
 application.on('*', (name, data) => {
-  console.dir([name, data]);
+  if(name, data){
+    console.dir([name, data]);
+  }
 });
 
 application.emit('smth', { a: 5 });
