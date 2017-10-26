@@ -48,3 +48,21 @@ cargo doc --open
 ```
 
 will build it and open it in your browser.
+
+## Contributing
+
+Formatting your code using [rustfmt-nightly][] and fixing [clippy][] warnings,
+if there are any, is much appreciated 🐱
+
+Please note that, at the time of writing, you need a nightly compiler for these:
+
+```console
+rustup install nightly
+cargo +nightly install rustfmt-nightly clippy
+
+cargo +nightly fmt
+cargo +nightly clippy
+```
+
+[clippy]: https://github.com/rust-lang-nursery/rust-clippy
+[rustfmt-nightly]: https://github.com/rust-lang-nursery/rustfmt
