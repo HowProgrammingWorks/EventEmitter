@@ -1,17 +1,14 @@
-package main
+package emitter
 
-import (
-	"fmt"
+type Listener = func(...interface{})
+type EventEmitter map[string][]Listener
 
-	"./emitter"
-)
+func (ee EventEmitter) On(name string, listener Listener) {
+	ee[name] = append(ee[name], listener)
+}
 
-func main() {
-	application := make(emitter.EventEmitter)
-
-	application.On("smth", func(data ...interface{}) {
-		fmt.Println(data...)
-	})
-
-	application.Emit("smth", struct{ A int }{A: 5})
+func (ee EventEmitter) Emit(name string, data ...interface{}) {
+	for _, listener := range ee[name] {
+		listener(data...)
+	}
 }

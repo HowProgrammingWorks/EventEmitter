@@ -1,25 +1,35 @@
-package main
+package emitter
 
-import (
-	"fmt"
+type AnyListener func(string, ...interface{})
 
-	"./emitter"
-)
+type Emitter interface {
+	On(name string, listener Listener)
+	Emit(name string, data ...interface{})
+}
 
-func main() {
-	application := emitter.NewEnhancedEmitter()
+type EnhancedEmitter struct {
+	EventEmitter
+	anyListeners []AnyListener
+}
 
-	application.On("smth", func(data ...interface{}) {
-		fmt.Println("Certain event")
-		fmt.Println(data...)
-	})
+func (eee EnhancedEmitter) Emit(name string, data ...interface{}) {
+	ee := eee.EventEmitter
+	if name != "*" {
+		ee.Emit(name, data...)
+	}
+	for _, listener := range eee.anyListeners {
+		listener(name, data...)
+	}
+}
 
-	application.OnAny(func(name string, data ...interface{}) {
-		fmt.Println("Any event")
-		fmt.Println(name, data)
-	})
+func (eee *EnhancedEmitter) OnAny(listener AnyListener) {
+	eee.anyListeners = append(eee.anyListeners, listener)
+}
 
-	application.Emit("smth", struct{ A int }{5})
-	application.Emit("smth2", struct{ A int }{500})
-	application.Emit("*", struct{ A int }{5})
+func NewEnhancedEmitter() *EnhancedEmitter {
+	ee := make(EventEmitter)
+	return &EnhancedEmitter{
+		ee,
+		[]AnyListener{},
+	}
 }
