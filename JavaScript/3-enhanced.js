@@ -6,7 +6,7 @@ const emitter = () => {
   const ee = new events.EventEmitter();
   const emit = ee.emit;
   ee.emit = (...args) => {
-    emit.apply(ee, args);
+    if (args[0] !== '*') emit.apply(ee, args);
     args.unshift('*');
     emit.apply(ee, args);
   };
