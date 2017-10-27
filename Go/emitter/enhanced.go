@@ -8,7 +8,7 @@ type Emitter interface {
 }
 
 type EnhancedEmitter struct {
-	*EventEmitter
+	EventEmitter
 	anyListeners []AnyListener
 }
 
@@ -29,7 +29,7 @@ func (eee *EnhancedEmitter) OnAny(listener AnyListener) {
 func NewEnhancedEmitter() *EnhancedEmitter {
 	ee := make(EventEmitter)
 	return &EnhancedEmitter{
-		&ee,
+		ee,
 		[]AnyListener{},
 	}
 }

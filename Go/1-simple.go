@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"../emitter"
+	"./emitter"
 )
 
 func main() {
