@@ -2,7 +2,7 @@ package emitter
 
 import "fmt"
 
-func ExampleEnhanced() {
+func ExampleEnhancedEmitter() {
 	application := NewEnhancedEmitter()
 
 	application.On("smth", func(data ...interface{}) {

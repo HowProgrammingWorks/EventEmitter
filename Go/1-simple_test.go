@@ -2,7 +2,7 @@ package emitter
 
 import "fmt"
 
-func ExampleSimple() {
+func ExampleEventEmitter() {
 	application := make(EventEmitter)
 
 	application.On("smth", func(data ...interface{}) {
