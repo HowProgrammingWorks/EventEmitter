@@ -1,0 +1,20 @@
+{
+  "name": "enhanced-emitter",
+  "version": "0.0.1",
+  "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
+  "description": "Enhanced EventEmitter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HowProgrammingWorks/EventEmitter"
+  },
+  "main": "./emitter.js",
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "eslint . && node test.js",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
