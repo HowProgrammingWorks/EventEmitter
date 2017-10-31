@@ -7,7 +7,7 @@ def check_max_listeners(f):
     """
     def wrapper(self, event, listener):
         if self.listener_count(event) >= self.get_max_listeners() != 0:
-            raise Exception('Exceeded the maximum number of listeners - %s' % self.__max_listeners)
+            raise ValueError('Exceeded the maximum number of listeners - %s' % self.__max_listeners)
         return f(self, event, listener)
     return wrapper
 
@@ -61,24 +61,21 @@ class EventEmitter:
     def remove_listener(self, event: str, listener: Callable) -> 'EventEmitter':
         """
         Remove one listener from the event
-        """
-        if event not in self.event_names():
-            raise Exception('Event was not found')
-        if listener not in self.listeners(event):
-            raise Exception('Listener was not found')
+        """        
         if listener in self.__events.get(event, []):
             self.__events[event].remove(listener)
-        if listener in self.__events_once.get(event, []):
+        elif listener in self.__events_once.get(event, []):
             self.__events_once[event].remove(listener)
         return self
 
-    def remove_all_listener(self, event: str=None) -> 'EventEmitter':
+    def remove_all_listeners(self, event: str=None) -> 'EventEmitter':
         """
         Remove all listeners from the event
         """
-        if event not in self.event_names():
-            raise Exception('Event was not found')
-        if event in self.__events.keys():
+        if event is None:
+            self.__events.clear()
+            self.__events_once.clear()
+        if event in self.__events:
             del self.__events[event]
         if event in self.__events_once:
             del self.__events_once[event]
@@ -88,9 +85,9 @@ class EventEmitter:
         """
         Set max quantity of listeners of the event
         """
-        if type(n) != int and n < 0:
-            raise Exception('n must be int, and value must be > 0')
-        self.__max_listeners = n
+        if int(n) < 0:
+            raise ValueError('"n" argument must be a positive number')
+        self.__max_listeners = int(n)
 
     def get_max_listeners(self) -> int:
         """
@@ -102,27 +99,22 @@ class EventEmitter:
         """
         Get all of listeners of the event
         """
-        return [*self.__events.get(event, []), *self.__events_once.get(event, [])]
+        return self.__events.get(event, []) + self.__events_once.get(event, [])
 
     def emit(self, event: str, *args, **kwargs) -> bool:
         """
         Emit all of listeners of the event
         """
-        if event not in self.event_names():
-            return False
-        for e in self.__events.get(event, []):
-            e(*args, **kwargs)
-        for e in self.__events_once.get(event, []):
-            e(*args, **kwargs)
-            del self.__events_once[event]
-
-        return False
+        listeners = self.__events.get(event, []) + self.__events_once.pop(event, [])
+        for listener in listeners:
+            listener(*args, **kwargs)
+        return len(listeners) > 0
 
     def listener_count(self, event: str) -> int:
         """
         Get count of listeners of the event
         """
-        return len(self.__events.get(event, []))+len(self.__events_once.get(event,[]))
+        return len(self.listeners(event))
 
     def event_names(self) -> List[str]:
         """
