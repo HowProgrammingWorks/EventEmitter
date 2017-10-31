@@ -1,6 +1,6 @@
-# Event Emitter
-
 ## Event Emitter object similar to Node.js Event Emitter
+
+#### Written in python 3
 
 ### Usage example:
 
