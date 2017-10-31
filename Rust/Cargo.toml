@@ -1,0 +1,6 @@
+[package]
+name = "event-emitter"
+version = "0.1.0"
+authors = ["Alexey Orlenko <eaglexrlnk@gmail.com>"]
+
+[dependencies]
