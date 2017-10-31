@@ -128,4 +128,4 @@ class EventEmitter:
         """
         Get list of the event names
         """
-        return list({*self.__events.keys(), *self.__events_once.keys()})
+        return list(self.__events.keys() | self.__events_once.keys())
