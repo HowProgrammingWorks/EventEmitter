@@ -3,11 +3,14 @@ from typing import List, Callable
 
 def check_max_listeners(f):
     """
-    Decorator that used to check is event have less count of listeners then self.__max_listeners
+    Decorator that used to check is event have less count of listeners then
+    self.__max_listeners
     """
+
     def wrapper(self, event, listener):
         if self.listener_count(event) >= self.get_max_listeners() != 0:
-            raise ValueError('Exceeded the maximum number of listeners - %s' % self.__max_listeners)
+            raise ValueError('Exceeded the maximum number of listeners - %s' %
+                             self.get_max_listeners())
         return f(self, event, listener)
     return wrapper
 
@@ -19,19 +22,22 @@ class EventEmitter:
     DEFAULT_MAX_LISTENERS = 5
 
     def __init__(self):
-        self.__max_listeners = EventEmitter.DEFAULT_MAX_LISTENERS  # SET 0 to disable limit of listeners.
+        # SET 0 to disable limit of listeners.
+        self.__max_listeners = EventEmitter.DEFAULT_MAX_LISTENERS
         self.__events = {}
         self.__events_once = {}
 
     @check_max_listeners
     def add_listener(self, event: str, listener: Callable) -> 'EventEmitter':
         """
-        Add listener that can be emitted many times to event in the start of the list
+        Add listener that can be emitted many times to event in the start of
+        the list
         """
         self.__events.setdefault(event, []).append(listener)
         return self
 
-    # Node.js have identical methods with different names to solve compatibility problems
+    # Node.js have identical methods with different names to solve
+    # compatibility problems
     on = add_listener
 
     @check_max_listeners
@@ -61,7 +67,7 @@ class EventEmitter:
     def remove_listener(self, event: str, listener: Callable) -> 'EventEmitter':
         """
         Remove one listener from the event
-        """        
+        """
         if listener in self.__events.get(event, []):
             self.__events[event].remove(listener)
         elif listener in self.__events_once.get(event, []):
@@ -85,9 +91,12 @@ class EventEmitter:
         """
         Set max quantity of listeners of the event
         """
-        if int(n) < 0:
+        if n < 0:
             raise ValueError('"n" argument must be a positive number')
         self.__max_listeners = int(n)
+
+    def get_max_listeners(self) -> int:
+        return self.__max_listeners
 
     def get_max_listeners(self) -> int:
         """
@@ -105,7 +114,8 @@ class EventEmitter:
         """
         Emit all of listeners of the event
         """
-        listeners = self.__events.get(event, []) + self.__events_once.pop(event, [])
+        listeners = self.__events.get(
+            event, []) + self.__events_once.pop(event, [])
         for listener in listeners:
             listener(*args, **kwargs)
         return len(listeners) > 0
