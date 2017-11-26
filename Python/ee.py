@@ -96,9 +96,6 @@ class EventEmitter:
         self.__max_listeners = int(n)
 
     def get_max_listeners(self) -> int:
-        return self.__max_listeners
-
-    def get_max_listeners(self) -> int:
         """
         Return max quantity of listeners of the event
         """
