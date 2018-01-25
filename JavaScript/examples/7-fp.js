@@ -2,8 +2,10 @@
 
 const emitter = (events = {}) => ({
   on: (name, fn) => (events[name] = events[name] || []).push(fn),
-  emit: (name, data) => (events[name] || []).forEach(fn => fn(data))
+  emit: (name, ...data) => (events[name] || []).forEach(fn => fn(...data))
 });
+
+// Usage
 
 const ee = emitter();
 
@@ -11,4 +13,4 @@ ee.on('smth', (data) => {
   console.dir(data);
 });
 
-ee.emit('asmth', { a: 5 });
+ee.emit('smth', { a: 5 });

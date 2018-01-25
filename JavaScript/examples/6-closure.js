@@ -8,12 +8,14 @@ const emitter = () => {
       events[name] = event;
       event.push(fn);
     },
-    emit: (name, data) => {
+    emit: (name, ...data) => {
       const event = events[name];
-      if (event) event.forEach(fn => fn(data));
+      if (event) event.forEach(fn => fn(...data));
     }
   };
 };
+
+// Usage
 
 const ee = emitter();
 

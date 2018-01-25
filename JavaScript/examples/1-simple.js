@@ -10,9 +10,9 @@ EventEmitter.prototype.on = function(name, fn) {
   event.push(fn);
 };
 
-EventEmitter.prototype.emit = function(name, data) {
+EventEmitter.prototype.emit = function(name, ...data) {
   const event = this.events[name];
-  if (event) event.forEach(fn => fn(data));
+  if (event) event.forEach(fn => fn(...data));
 };
 
 module.exports = EventEmitter;
