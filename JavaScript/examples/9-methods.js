@@ -6,7 +6,9 @@ const emitter = (l, o) => (l = {}, o = {
   once: (n, f, g) => o.on(n, g = (...a) => (f(...a), o.remove(n, g))),
   remove: (n, f, e) => (e = l[n] || [], e.splice(e.indexOf(f), 1)),
   clear: (n) => (n ? l[n] = [] : l = {}),
-  count: (n) => (l[n] || []).length
+  count: (n) => (l[n] || []).length,
+  listeners: (n) => (l[n] || []).slice(),
+  names: () => Object.keys(l)
 });
 
 // Usage
@@ -54,3 +56,13 @@ ee.emit('e1', { msg: 'e1 ok' });
 
 ee.clear();
 ee.emit('e1', { msg: 'e1 not ok' });
+
+// listeners and names
+
+ee.on('e5', () => {});
+ee.on('e5', () => {});
+ee.on('e6', () => {});
+ee.on('e7', () => {});
+
+console.log('listeners', ee.listeners('e5'));
+console.log('names', ee.names());
