@@ -35,10 +35,11 @@ const emitter = () => {
       if (g) {
         i = event.indexOf(g);
         if (i !== -1) event.splice(i, 1);
+        if (!event.length) events.delete(name);
       }
     },
     clear: (name) => {
-      if (name) events.set(name, []);
+      if (name) events.delete(name);
       else events.clear();
     },
     count: (name) => {

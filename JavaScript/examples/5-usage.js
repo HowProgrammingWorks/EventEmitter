@@ -4,7 +4,7 @@ const emitter = require('./3-enhanced.js');
 
 const ee = emitter();
 
-ee.on('smth', (data) => {
+ee.on('event1', (data) => {
   console.log('Certain event');
   console.dir(data);
 });
@@ -14,6 +14,6 @@ ee.on('*', (name, data) => {
   console.dir([name, data]);
 });
 
-ee.emit('smth', { a: 5 });
-ee.emit('smth2', { a: 500 });
+ee.emit('event1', { a: 5 });
+ee.emit('event2', { a: 500 });
 ee.emit('*', { a: 700 });
