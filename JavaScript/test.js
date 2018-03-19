@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const emitter = require('.');
+const emitter = require('./emitter.js');
 
 const ee = emitter();
 
