@@ -9,7 +9,7 @@ const emitter = (events = {}) => ({
 
 const ee = emitter();
 
-ee.on('event1', (data) => {
+ee.on('event1', data => {
   console.dir(data);
 });
 

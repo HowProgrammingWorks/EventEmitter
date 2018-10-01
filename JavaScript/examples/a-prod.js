@@ -38,15 +38,15 @@ const emitter = () => {
         if (!event.length) events.delete(name);
       }
     },
-    clear: (name) => {
+    clear: name => {
       if (name) events.delete(name);
       else events.clear();
     },
-    count: (name) => {
+    count: name => {
       const event = events.get(name);
       return event ? event.length : 0;
     },
-    listeners: (name) => {
+    listeners: name => {
       const event = events.get(name);
       return event.slice();
     },
@@ -61,7 +61,7 @@ const ee = emitter();
 
 // on and emit
 
-ee.on('e1', (data) => {
+ee.on('e1', data => {
   console.dir(data);
 });
 
@@ -69,7 +69,7 @@ ee.emit('e1', { msg: 'e1 ok' });
 
 // once
 
-ee.once('e2', (data) => {
+ee.once('e2', data => {
   console.dir(data);
 });
 
@@ -78,7 +78,7 @@ ee.emit('e2', { msg: 'e2 not ok' });
 
 // remove
 
-const f3 = (data) => {
+const f3 = data => {
   console.dir(data);
 };
 

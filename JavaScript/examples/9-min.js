@@ -5,9 +5,9 @@ const emitter = (l, o) => (l = {}, o = {
   emit: (n, ...d) => (l[n] || []).map(f => f(...d)),
   once: (n, f, g) => o.on(n, g = (...a) => (f(...a), o.remove(n, g))),
   remove: (n, f, e) => (e = l[n] || [], e.splice(e.indexOf(f), 1)),
-  clear: (n) => (n ? delete l[n] : l = {}),
-  count: (n) => (l[n] || []).length,
-  listeners: (n) => (l[n] || []).slice(),
+  clear: n => (n ? delete l[n] : l = {}),
+  count: n => (l[n] || []).length,
+  listeners: n => (l[n] || []).slice(),
   names: () => Object.keys(l)
 });
 
@@ -17,7 +17,7 @@ const ee = emitter();
 
 // on and emit
 
-ee.on('e1', (data) => {
+ee.on('e1', data => {
   console.dir(data);
 });
 
@@ -25,7 +25,7 @@ ee.emit('e1', { msg: 'e1 ok' });
 
 // once
 
-ee.once('e2', (data) => {
+ee.once('e2', data => {
   console.dir(data);
 });
 
@@ -34,7 +34,7 @@ ee.emit('e2', { msg: 'e2 not ok' });
 
 // remove
 
-const f3 = (data) => {
+const f3 = data => {
   console.dir(data);
 };
 

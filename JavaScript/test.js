@@ -5,7 +5,7 @@ const emitter = require('./emitter.js');
 
 const ee = emitter();
 
-ee.on('smth', (data) => {
+ee.on('smth', data => {
   assert.strictEqual(data.a, 5);
 });
 
