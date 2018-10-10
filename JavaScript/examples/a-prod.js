@@ -6,8 +6,8 @@ const emitter = () => {
   const ee = {
     on: (name, f, timeout = 0) => {
       const event = events.get(name);
-      if (!event) events.set(name, [f]);
-      else event.push(f);
+      if (event) event.push(f);
+      else events.set(name, [f]);
       if (timeout) setTimeout(() => {
         ee.remove(name, f);
       }, timeout);
