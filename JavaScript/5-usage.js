@@ -1,6 +1,6 @@
 'use strict';
 
-const emitter = require('./3-enhanced.js');
+const emitter = require('./4-star-fix.js');
 
 const ee = emitter();
 
