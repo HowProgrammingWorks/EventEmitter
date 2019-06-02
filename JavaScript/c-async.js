@@ -7,15 +7,18 @@ class AsyncEventEmitter {
   }
 
   on(name, fn) {
-    const event = this.events.get(name);
-    if (event) event.add(fn);
-    else this.events.set(name, new Set([fn]));
+    let event = this.events.get(name);
+    if (!event) {
+      event = new Set();
+      this.events.set(name, event);
+    }
+    event.add(fn);
   }
 
   once(name, fn) {
     const wrapper = (...args) => {
       this.remove(name, wrapper);
-      fn(...args);
+      return fn(...args);
     };
     this.wrappers.set(fn, wrapper);
     this.on(name, wrapper);
@@ -24,7 +27,8 @@ class AsyncEventEmitter {
   async emit(name, ...args) {
     const event = this.events.get(name);
     if (!event) return;
-    const promises = [...event.values()].map(fn => fn(...args));
+    const listeners = [...event.values()];
+    const promises = listeners.map(fn => fn(...args));
     return Promise.all(promises);
   }
 
@@ -33,13 +37,11 @@ class AsyncEventEmitter {
     if (!event) return;
     if (event.has(fn)) {
       event.delete(fn);
-      return;
+    } else {
+      const wrapper = this.wrappers.get(fn);
+      if (wrapper) event.delete(wrapper);
     }
-    const wrapper = this.wrappers.get(fn);
-    if (wrapper) {
-      event.delete(wrapper);
-      if (event.size === 0) this.events.delete(name);
-    }
+    if (event.size === 0) this.events.delete(name);
   }
 
   clear(name) {
