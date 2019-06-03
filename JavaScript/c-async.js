@@ -35,12 +35,9 @@ class AsyncEventEmitter {
   remove(name, fn) {
     const event = this.events.get(name);
     if (!event) return;
-    if (event.has(fn)) {
-      event.delete(fn);
-    } else {
-      const wrapper = this.wrappers.get(fn);
-      if (wrapper) event.delete(wrapper);
-    }
+    if (event.has(fn)) event.delete(fn);
+    const wrapper = this.wrappers.get(fn);
+    if (wrapper) event.delete(wrapper);
     if (event.size === 0) this.events.delete(name);
   }
 
