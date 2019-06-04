@@ -1,6 +1,6 @@
 'use strict';
 
-class AsyncEventEmitter {
+class AsyncEmitter {
   constructor() {
     this.events = new Map();
     this.wrappers = new Map();
@@ -16,12 +16,18 @@ class AsyncEventEmitter {
   }
 
   once(name, fn) {
+    if (fn === undefined) {
+      return new Promise(resolve => {
+        this.once(name, resolve);
+      });
+    }
     const wrapper = (...args) => {
       this.remove(name, wrapper);
       return fn(...args);
     };
     this.wrappers.set(fn, wrapper);
     this.on(name, wrapper);
+    return undefined;
   }
 
   async emit(name, ...args) {
@@ -33,17 +39,31 @@ class AsyncEventEmitter {
   }
 
   remove(name, fn) {
-    const event = this.events.get(name);
+    const { events, wrappers } = this;
+    const event = events.get(name);
     if (!event) return;
     if (event.has(fn)) event.delete(fn);
-    const wrapper = this.wrappers.get(fn);
-    if (wrapper) event.delete(wrapper);
-    if (event.size === 0) this.events.delete(name);
+    const wrapper = wrappers.get(fn);
+    if (wrapper) {
+      wrappers.delete(fn);
+      event.delete(wrapper);
+    }
+    if (event.size === 0) events.delete(name);
   }
 
   clear(name) {
-    if (name) this.events.delete(name);
-    else this.events.clear();
+    const { events, wrappers } = this;
+    if (!name) {
+      events.clear();
+      wrappers.clear();
+      return;
+    }
+    const event = events.get(name);
+    if (!event) return;
+    for (const [fn, wrapper] of wrappers.entries()) {
+      if (event.has(wrapper)) wrappers.delete(fn);
+    }
+    events.delete(name);
   }
 
   count(name) {
@@ -63,7 +83,7 @@ class AsyncEventEmitter {
 
 // Usage
 
-const ee = new AsyncEventEmitter();
+const ee = new AsyncEmitter();
 
 (async () => {
 
