@@ -22,7 +22,7 @@ class AsyncEmitter {
       });
     }
     const wrapper = (...args) => {
-      this.remove(name, wrapper);
+      this.remove(name, fn);
       return fn(...args);
     };
     this.wrappers.set(fn, wrapper);
@@ -73,7 +73,7 @@ class AsyncEmitter {
 
   listeners(name) {
     const event = this.events.get(name);
-    return new Set(event);
+    return [...event];
   }
 
   names() {
