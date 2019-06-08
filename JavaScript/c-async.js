@@ -3,16 +3,20 @@
 class AsyncEmitter {
   constructor() {
     this.events = new Map();
-    this.wrappers = new Map();
+  }
+
+  event(name) {
+    let event = this.events.get(name);
+    if (event) return event;
+    const on = new Set();
+    const once = new Set();
+    event = { on, once };
+    this.events.set(name, event);
+    return event;
   }
 
   on(name, fn) {
-    let event = this.events.get(name);
-    if (!event) {
-      event = new Set();
-      this.events.set(name, event);
-    }
-    event.add(fn);
+    this.event(name).on.add(fn);
   }
 
   once(name, fn) {
@@ -21,59 +25,58 @@ class AsyncEmitter {
         this.once(name, resolve);
       });
     }
-    const wrapper = (...args) => {
-      this.remove(name, fn);
-      return fn(...args);
-    };
-    this.wrappers.set(fn, wrapper);
-    this.on(name, wrapper);
-    return undefined;
+    this.event(name).once.add(fn);
+    return null;
   }
 
   async emit(name, ...args) {
     const event = this.events.get(name);
-    if (!event) return;
-    const listeners = [...event.values()];
-    const promises = listeners.map(fn => fn(...args));
+    if (!event) return null;
+    const { on, once } = event;
+    const aon = [...on.values()];
+    const aonce = [...once.values()];
+    const promises = aon.concat(aonce).map(fn => fn(...args));
+    once.clear();
+    if (on.size === 0 && once.size === 0) {
+      this.events.delete(name);
+    }
     return Promise.all(promises);
   }
 
   remove(name, fn) {
-    const { events, wrappers } = this;
+    const { events } = this;
     const event = events.get(name);
     if (!event) return;
-    if (event.has(fn)) event.delete(fn);
-    const wrapper = wrappers.get(fn);
-    if (wrapper) {
-      wrappers.delete(fn);
-      event.delete(wrapper);
+    const { on, once } = event;
+    on.delete(fn);
+    once.delete(fn);
+    if (on.size === 0 && once.size === 0) {
+      this.events.delete(name);
     }
-    if (event.size === 0) events.delete(name);
   }
 
   clear(name) {
-    const { events, wrappers } = this;
+    const { events } = this;
     if (!name) {
       events.clear();
-      wrappers.clear();
       return;
     }
     const event = events.get(name);
-    if (!event) return;
-    for (const [fn, wrapper] of wrappers.entries()) {
-      if (event.has(wrapper)) wrappers.delete(fn);
-    }
-    events.delete(name);
+    if (event) events.delete(name);
   }
 
   count(name) {
     const event = this.events.get(name);
-    return event ? event.size : 0;
+    if (!event) return 0;
+    const { on, once } = event;
+    return on.size + once.size;
   }
 
   listeners(name) {
     const event = this.events.get(name);
-    return [...event];
+    if (!event) return [];
+    const { on, once } = event;
+    return [...on.values(), ...once.values()];
   }
 
   names() {
