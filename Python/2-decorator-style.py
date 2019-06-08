@@ -6,10 +6,10 @@ class EventEmitter:
         self._handlers = defaultdict(list)
 
     def on(self, name):
-        def wrapper(func):
+        def register(func):
             self._handlers[name].append(func)
             return func
-        return wrapper
+        return register
 
     def emit(self, name, *args, **kwargs):
         for func in self._handlers[name]:
