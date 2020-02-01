@@ -12,7 +12,8 @@ EventEmitter.prototype.on = function(name, fn) {
 
 EventEmitter.prototype.emit = function(name, ...data) {
   const event = this.events[name];
-  if (event) event.forEach(fn => fn(...data));
+  if (!event) return;
+  for (const listener of event) listener(...data);
 };
 
 module.exports = EventEmitter;
