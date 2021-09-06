@@ -69,7 +69,7 @@ const ee = new EventEmitter();
 
 // on and emit
 
-ee.on('e1', data => {
+ee.on('e1', (data) => {
   console.dir(data);
 });
 
@@ -77,7 +77,7 @@ ee.emit('e1', { msg: 'e1 ok' });
 
 // once
 
-ee.once('e2', data => {
+ee.once('e2', (data) => {
   console.dir(data);
 });
 
@@ -86,7 +86,7 @@ ee.emit('e2', { msg: 'e2 not ok' });
 
 // remove
 
-const f3 = data => {
+const f3 = (data) => {
   console.dir(data);
 };
 

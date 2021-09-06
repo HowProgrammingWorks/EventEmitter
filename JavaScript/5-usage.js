@@ -4,7 +4,7 @@ const emitter = require('./4-star-fix.js');
 
 const ee = emitter();
 
-ee.on('event1', data => {
+ee.on('event1', (data) => {
   console.log('Certain event');
   console.dir(data);
 });

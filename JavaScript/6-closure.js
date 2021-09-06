@@ -10,7 +10,7 @@ const emitter = () => {
     },
     emit: (name, ...data) => {
       const event = events[name];
-      if (event) event.forEach(fn => fn(...data));
+      if (event) event.forEach((fn) => fn(...data));
     }
   };
 };
@@ -19,7 +19,7 @@ const emitter = () => {
 
 const ee = emitter();
 
-ee.on('event1', data => {
+ee.on('event1', (data) => {
   console.dir(data);
 });
 

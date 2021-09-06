@@ -21,7 +21,7 @@ class AsyncEmitter {
 
   once(name, fn) {
     if (fn === undefined) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.once(name, resolve);
       });
     }
@@ -35,7 +35,7 @@ class AsyncEmitter {
     const { on, once } = event;
     const aon = [...on.values()];
     const aonce = [...once.values()];
-    const promises = aon.concat(aonce).map(fn => fn(...args));
+    const promises = aon.concat(aonce).map((fn) => fn(...args));
     once.clear();
     if (on.size === 0 && once.size === 0) {
       this.events.delete(name);
