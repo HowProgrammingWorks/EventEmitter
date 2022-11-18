@@ -38,7 +38,7 @@ const emitter = () => {
     },
     listeners: (name) => {
       const event = events[name];
-      return event.slice();
+      return event ? event.slice() : [];
     },
     names: () => Object.keys(events)
   };
