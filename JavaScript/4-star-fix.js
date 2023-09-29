@@ -6,7 +6,9 @@ const emitter = () => {
   const ee = new events.EventEmitter();
   const emit = ee.emit;
   ee.emit = (...args) => {
-    if (args[0] !== '*') emit.apply(ee, args);
+    const [name] = args;
+    if (name === '*') throw new Error('Event name "*" is reserved');
+    emit.apply(ee, args);
     args.unshift('*');
     emit.apply(ee, args);
   };
