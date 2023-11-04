@@ -3,7 +3,6 @@
 class EventEmitter {
   constructor() {
     this.events = new Map();
-    this.wrappers = new Map();
   }
 
   on(name, fn) {
@@ -17,7 +16,6 @@ class EventEmitter {
       this.remove(name, wrapper);
       fn(...args);
     };
-    this.wrappers.set(fn, wrapper);
     this.on(name, wrapper);
   }
 
@@ -35,11 +33,6 @@ class EventEmitter {
     if (event.has(fn)) {
       event.delete(fn);
       return;
-    }
-    const wrapper = this.wrappers.get(fn);
-    if (wrapper) {
-      event.delete(wrapper);
-      if (event.size === 0) this.events.delete(name);
     }
   }
 
