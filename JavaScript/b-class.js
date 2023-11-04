@@ -32,7 +32,7 @@ class EventEmitter {
     if (!event) return;
     if (event.has(fn)) {
       event.delete(fn);
-      return;
+      if (event.size === 0) this.events.delete(name);
     }
   }
 
