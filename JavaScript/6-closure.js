@@ -11,7 +11,7 @@ const emitter = () => {
     emit: (name, ...data) => {
       const event = events[name];
       if (event) event.forEach((fn) => fn(...data));
-    }
+    },
   };
 };
 

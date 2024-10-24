@@ -7,9 +7,11 @@ const emitter = () => {
       const event = events[name] || [];
       events[name] = event;
       event.push(f);
-      if (timeout) setTimeout(() => {
-        ee.remove(name, f);
-      }, timeout);
+      if (timeout) {
+        setTimeout(() => {
+          ee.remove(name, f);
+        }, timeout);
+      }
     },
     emit: (name, ...data) => {
       const event = events[name];
@@ -40,7 +42,7 @@ const emitter = () => {
       const event = events[name];
       return event.slice();
     },
-    names: () => Object.keys(events)
+    names: () => Object.keys(events),
   };
   return ee;
 };

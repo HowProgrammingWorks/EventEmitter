@@ -8,9 +8,11 @@ const emitter = () => {
       const event = events.get(name);
       if (event) event.push(f);
       else events.set(name, [f]);
-      if (timeout) setTimeout(() => {
-        ee.remove(name, f);
-      }, timeout);
+      if (timeout) {
+        setTimeout(() => {
+          ee.remove(name, f);
+        }, timeout);
+      }
     },
     emit: (name, ...data) => {
       const event = events.get(name);
@@ -51,7 +53,7 @@ const emitter = () => {
       const event = events.get(name);
       return event.slice();
     },
-    names: () => [...events.keys()]
+    names: () => [...events.keys()],
   };
   return ee;
 };

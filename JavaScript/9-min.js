@@ -8,7 +8,7 @@ const emitter = (l, o) => (l = {}, o = {
   clear: (n) => (n ? delete l[n] : l = {}),
   count: (n) => (l[n] || []).length,
   listeners: (n) => (l[n] || []).slice(),
-  names: () => Object.keys(l)
+  names: () => Object.keys(l),
 });
 
 // Usage

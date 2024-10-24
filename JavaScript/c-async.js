@@ -86,9 +86,8 @@ class AsyncEmitter {
 
 // Usage
 
-const ee = new AsyncEmitter();
-
-(async () => {
+const main = async () => {
+  const ee = new AsyncEmitter();
 
   ee.on('e1', async () => {
     console.log('e1 listener 1');
@@ -114,5 +113,6 @@ const ee = new AsyncEmitter();
   await ee.emit('e1');
   await ee.emit('e2');
   console.log('end');
+};
 
-})();
+main();
