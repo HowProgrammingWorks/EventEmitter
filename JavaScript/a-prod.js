@@ -51,7 +51,7 @@ const emitter = () => {
     },
     listeners: (name) => {
       const event = events.get(name);
-      return event.slice();
+      return event ? event.slice() : [];
     },
     names: () => [...events.keys()],
   };
