@@ -50,7 +50,7 @@ class EventEmitter {
 
   count(name) {
     const event = this.events.get(name);
-    return event ? event.size : 0;
+    return event?.size ?? 0;
   }
 
   listeners(name) {

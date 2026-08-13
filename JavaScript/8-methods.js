@@ -4,7 +4,7 @@ const emitter = () => {
   let events = {};
   const ee = {
     on: (name, f, timeout = 0) => {
-      const event = events[name] || [];
+      const event = events[name] ?? [];
       events[name] = event;
       event.push(f);
       if (timeout) {
@@ -15,7 +15,7 @@ const emitter = () => {
     },
     emit: (name, ...data) => {
       const event = events[name];
-      if (event) event.forEach((f) => f(...data));
+      event?.forEach((f) => f(...data));
     },
     once: (name, f) => {
       const g = (...a) => {
@@ -36,7 +36,7 @@ const emitter = () => {
     },
     count: (name) => {
       const event = events[name];
-      return event ? event.length : 0;
+      return event?.length ?? 0;
     },
     listeners: (name) => {
       const event = events[name];

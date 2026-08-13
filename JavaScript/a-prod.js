@@ -16,7 +16,7 @@ const emitter = () => {
     },
     emit: (name, ...data) => {
       const event = events.get(name);
-      if (event) event.forEach((f) => f(...data));
+      event?.forEach((f) => f(...data));
     },
     once: (name, f) => {
       const g = (...a) => {
@@ -47,7 +47,7 @@ const emitter = () => {
     },
     count: (name) => {
       const event = events.get(name);
-      return event ? event.length : 0;
+      return event?.length ?? 0;
     },
     listeners: (name) => {
       const event = events.get(name);
